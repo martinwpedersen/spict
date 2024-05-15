@@ -3651,7 +3651,7 @@ plotspict.compare.one <- function(rep, ...,
                                                                        paste(unique(unlist(catchunit)),
                                                                              collapse = " | "))
         }else{
-            indi <- lapply(replist, function(x) which(x$inp$time <= x$inp$timerange[2]))
+            indi <- lapply(replist, function(x) which(x$inp$time <= x$inp$timerange[2] & !x$inp$isspinup))
             xlist <- lapply(1:nrep, function(x) replist[[x]]$inp$time[indi[[x]]])
             ylist <- lapply(1:nrep, function(x) get.par(par, replist[[x]],
                                                         exp = exp, CI = CI)[indi[[x]],1:3])
