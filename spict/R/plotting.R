@@ -2571,14 +2571,15 @@ plotspict.retro <- function(rep, stamp=get.version(), add.mohn = TRUE, CI = 0.95
         mr <- suppressMessages(mohns_rho(rep, what = c("FFmsy", "BBmsy")))
         mrr <- round(mr, 3)
     }
+    removeSpinupInds <- function(inds, x) setdiff(inds,which(x$inp$isspinup))
     nruns <- length(rep$retro)
     bs <- bbs <- fs <- ffs <- time <- conv <- list()
     for (i in 1:nruns) {
-        bs[[i]] <- get.par('logB', rep$retro[[i]], exp=TRUE, CI = CI)[rep$retro[[i]]$inp$indest, 1:3]
-        bbs[[i]] <- get.par('logBBmsy', rep$retro[[i]], exp=TRUE, CI = CI)[rep$retro[[i]]$inp$indest, 1:3]
-        fs[[i]] <- get.par('logFnotS', rep$retro[[i]], exp=TRUE, CI = CI)[rep$retro[[i]]$inp$indest, 1:3]
-        ffs[[i]] <- get.par('logFFmsynotS', rep$retro[[i]], exp=TRUE, CI = CI)[rep$retro[[i]]$inp$indest, 1:3]
-        time[[i]] <- rep$retro[[i]]$inp$time[rep$retro[[i]]$inp$indest]
+        bs[[i]] <- get.par('logB', rep$retro[[i]], exp=TRUE, CI = CI)[removeSpinupInds(rep$retro[[i]]$inp$indest,rep$retro[[i]]), 1:3]
+        bbs[[i]] <- get.par('logBBmsy', rep$retro[[i]], exp=TRUE, CI = CI)[removeSpinupInds(rep$retro[[i]]$inp$indest,rep$retro[[i]]), 1:3]
+        fs[[i]] <- get.par('logFnotS', rep$retro[[i]], exp=TRUE, CI = CI)[removeSpinupInds(rep$retro[[i]]$inp$indest,rep$retro[[i]]), 1:3]
+        ffs[[i]] <- get.par('logFFmsynotS', rep$retro[[i]], exp=TRUE, CI = CI)[removeSpinupInds(rep$retro[[i]]$inp$indest,rep$retro[[i]]), 1:3]
+        time[[i]] <- rep$retro[[i]]$inp$time[removeSpinupInds(rep$retro[[i]]$inp$indest,rep$retro[[i]])]
         conv[[i]] <- rep$retro[[i]]$opt$convergence
     }
     conv <- ifelse(unlist(conv) == 0, TRUE, FALSE)
